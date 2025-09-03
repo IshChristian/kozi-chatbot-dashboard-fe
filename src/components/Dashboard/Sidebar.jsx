@@ -1,11 +1,22 @@
 "use client"
 import { Link, useLocation } from "react-router-dom"
-import { LayoutDashboard, Bot, MessageSquare, BarChart3, BookOpen, Puzzle, Settings, X } from "lucide-react"
+import {
+  LayoutDashboard,
+  Bot,
+  MessageSquare,
+  BarChart3,
+  BookOpen,
+  Puzzle,
+  Settings,
+  X,
+  MessageCircle,
+} from "lucide-react"
 
 const menuItems = [
   { name: "Overview", path: "/dashboard/overview", icon: LayoutDashboard },
   { name: "Chatbots", path: "/dashboard/chatbots", icon: Bot },
   { name: "Conversations", path: "/dashboard/conversations", icon: MessageSquare },
+  { name: "Chat", path: "/dashboard/chat", icon: MessageCircle },
   { name: "Analytics", path: "/dashboard/analytics", icon: BarChart3 },
   { name: "Training", path: "/dashboard/training", icon: BookOpen },
   { name: "Integrations", path: "/dashboard/integrations", icon: Puzzle },
@@ -30,8 +41,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
       `}
       >
-        <div className="flex items-center justify-between h-16 px-4 bg-pink-600">
-          <h1 className="text-xl font-bold text-white">ChatBot Pro</h1>
+        <div className="flex items-center justify-between h-16 px-4 bg-gradient-to-r from-purple-600 to-pink-600">
+          <div className="flex items-center space-x-2">
+            <h1 className="text-xl font-bold text-white">KOZi</h1>
+            <div className="w-2 h-6 bg-pink-400 rounded-full"></div>
+          </div>
           <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-white hover:text-gray-200">
             <X className="h-6 w-6" />
           </button>

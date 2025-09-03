@@ -11,6 +11,7 @@ import Analytics from "../Pages/Analytics"
 import Settings from "../Pages/Settings"
 import Training from "../Pages/Training"
 import Integrations from "../Pages/Integrations"
+import Chat from "../Pages/Chat"
 
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -32,6 +33,7 @@ function Dashboard() {
             <Route path="/training" element={<Training />} />
             <Route path="/integrations" element={<Integrations />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/chat" element={<Chat />} />
           </Routes>
         </main>
       </div>
