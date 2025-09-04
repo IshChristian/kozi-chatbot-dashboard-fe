@@ -34,13 +34,13 @@ function Header({ setSidebarOpen }) {
   ]
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200">
+    <header className="">
       <div className="flex items-center justify-between h-16 px-4">
         <div className="flex items-center">
           <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-gray-600 hover:text-gray-800 mr-4">
             <Menu className="h-6 w-6" />
           </button>
-          <h2 className="text-xl font-semibold text-gray-800">Dashboard</h2>
+          <h2 className="text-xl font-semibold text-gray-800"></h2>
         </div>
 
         <div className="flex items-center space-x-4">
