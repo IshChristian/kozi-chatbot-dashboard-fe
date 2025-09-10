@@ -68,7 +68,7 @@ function Chat() {
 
     async function fetchMessages() {
       try {
-        const res = await axios.get("http://localhost:3000/api/messages", {
+        const res = await axios.get("https://kozi-be.onrender.com/api/messages", {
           params: { user1: currentUserId, user2: botUserId }
         })
         setMessages(Array.isArray(res.data) ? res.data : [])
@@ -105,7 +105,7 @@ function Chat() {
 
     try {
       // Save user message to DB
-      await axios.post("http://localhost:3000/api/messages", userMessage)
+      await axios.post("https://kozi-be.onrender.com/api/messages", userMessage)
 
       // Get bot response
       const botContent = await getAIAnswer(inputText)
@@ -120,7 +120,7 @@ function Chat() {
       setIsTyping(false)
 
       // Save bot message to DB
-      await axios.post("http://localhost:3000/api/messages", botMessage)
+      await axios.post("https://kozi-be.onrender.com/api/messages", botMessage)
     } catch (error) {
       console.error("Error sending message:", error)
       setIsTyping(false)

@@ -46,7 +46,7 @@ function Register() {
     }
 
     try {
-      const res = await axios.post("http://localhost:3000/api/users/", {
+      const res = await axios.post("https://kozi-be.onrender.com/api/users/", {
         fullName: formData.fullName,
         email: formData.email,
         password: formData.password,
@@ -197,7 +197,7 @@ function Register() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-500 hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? "Creating account..." : "Create account"}
               </button>
