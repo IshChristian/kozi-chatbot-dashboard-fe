@@ -6,7 +6,7 @@ import aboutKozi from "./aboutKozi"
 import ReactMarkdown from "react-markdown"
 import axios from "axios"
 
-const OPENROUTER_API_KEY = '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'
+const OPENROUTER_API_KEY = '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'
 
 // Fixed: Parse JSON from localStorage and handle potential errors
 let currentUserId = null
@@ -157,8 +157,8 @@ function Chat() {
       {/* Messages Container */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message) => {
-          const isUserMessage = message.sender
-          const isBotMessage = botUserId
+          const isUserMessage = message.sender === currentUserId
+          const isBotMessage = botUserId === message.sender
           
           return (
             <div key={message._id} className={`flex ${isUserMessage ? "justify-end" : "justify-start"}`}>
