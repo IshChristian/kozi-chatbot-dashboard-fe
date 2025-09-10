@@ -2,22 +2,22 @@
 
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { useAuth } from "../../contexts/AuthContext"
-import { Mail, Lock, User, Eye, EyeOff } from "lucide-react"
+import axios from "axios"
+import { Mail, Lock, User, Eye, EyeOff, Phone } from "lucide-react"
 
 function Register() {
   const [formData, setFormData] = useState({
-    name: "",
+    fullName: "",
     email: "",
     password: "",
     confirmPassword: "",
+    phone: "",
   })
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
-  const { register } = useAuth()
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -45,12 +45,20 @@ function Register() {
       return
     }
 
-    const result = await register(formData.name, formData.email, formData.password)
-
-    if (result.success) {
-      navigate("/dashboard")
-    } else {
-      setError(result.error)
+    try {
+      const res = await axios.post("http://localhost:3000/api/users/", {
+        fullName: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+        phone: formData.phone,
+      })
+      if (res.data) {
+        navigate("/login")
+      } else {
+        setError(res.data.error || "Registration failed")
+      }
+    } catch (err) {
+      setError(err.response?.data?.error || "Registration failed")
     }
 
     setLoading(false)
@@ -73,17 +81,17 @@ function Register() {
             )}
 
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
                 Full Name
               </label>
               <div className="mt-1 relative">
                 <input
-                  id="name"
-                  name="name"
+                  id="fullName"
+                  name="fullName"
                   type="text"
                   autoComplete="name"
                   required
-                  value={formData.name}
+                  value={formData.fullName}
                   onChange={handleChange}
                   className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
                   placeholder="Enter your full name"
@@ -109,6 +117,25 @@ function Register() {
                   placeholder="Enter your email"
                 />
                 <Mail className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                Phone
+              </label>
+              <div className="mt-1 relative">
+                <input
+                  id="phone"
+                  name="phone"
+                  type="text"
+                  autoComplete="tel"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                  placeholder="Enter your phone number"
+                />
+                <Phone className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
               </div>
             </div>
 

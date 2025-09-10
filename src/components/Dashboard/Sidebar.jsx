@@ -13,14 +13,14 @@ import {
 } from "lucide-react"
 
 const menuItems = [
-  { name: "Overview", path: "/dashboard/overview", icon: LayoutDashboard },
-  { name: "Chatbots", path: "/dashboard/chatbots", icon: Bot },
-  { name: "Conversations", path: "/dashboard/conversations", icon: MessageSquare },
+  //{ name: "Overview", path: "/dashboard/overview", icon: LayoutDashboard },
+  //{ name: "Chatbots", path: "/dashboard/chatbots", icon: Bot },
+  //{ name: "Conversations", path: "/dashboard/conversations", icon: MessageSquare },
   { name: "Chat", path: "/dashboard/chat", icon: MessageCircle },
-  { name: "Analytics", path: "/dashboard/analytics", icon: BarChart3 },
-  { name: "Training", path: "/dashboard/training", icon: BookOpen },
-  { name: "Integrations", path: "/dashboard/integrations", icon: Puzzle },
-  { name: "Settings", path: "/dashboard/settings", icon: Settings },
+  //{ name: "Analytics", path: "/dashboard/analytics", icon: BarChart3 },
+  //{ name: "Training", path: "/dashboard/training", icon: BookOpen },
+  //{ name: "Integrations", path: "/dashboard/integrations", icon: Puzzle },
+  //{ name: "Settings", path: "/dashboard/settings", icon: Settings },
 ]
 
 function Sidebar({ sidebarOpen, setSidebarOpen }) {

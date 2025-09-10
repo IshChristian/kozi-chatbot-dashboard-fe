@@ -1,11 +1,12 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { useAuth } from "../../contexts/AuthContext"
-import { Menu, Bell, User, LogOut, Settings } from "lucide-react"
+import { Menu, Bell, User, LogOut } from "lucide-react"
 
 function Header({ setSidebarOpen }) {
-  const { user, logout } = useAuth()
+  // Get user info from localStorage
+  const user = JSON.parse(localStorage.getItem("user") || "{}")
+
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false)
   const dropdownRef = useRef(null)
@@ -32,6 +33,15 @@ function Header({ setSidebarOpen }) {
     { id: 2, message: "Chatbot training completed", time: "1 hour ago" },
     { id: 3, message: "Weekly analytics report ready", time: "3 hours ago" },
   ]
+
+  // Logout function with confirmation
+  const logout = () => {
+    const confirmed = window.confirm("Are you sure you want to log out?")
+    if (confirmed) {
+      localStorage.clear() // Clear all localStorage data
+      window.location.reload()
+    }
+  }
 
   return (
     <header className="">
@@ -83,20 +93,16 @@ function Header({ setSidebarOpen }) {
               <div className="bg-gray-100 rounded-full p-2 mr-2">
                 <User className="h-4 w-4" />
               </div>
-              <span className="text-sm font-medium">{user?.name}</span>
+              <span className="text-sm font-medium">{user?.fullName || "Guest"}</span>
             </button>
 
             {dropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 py-1 z-50">
                 <div className="px-4 py-2 border-b border-gray-200">
-                  <p className="text-sm font-medium text-gray-900">{user?.name}</p>
-                  <p className="text-xs text-gray-500">{user?.email}</p>
+                  <p className="text-sm font-medium text-gray-900">{user?.fullName || "Guest"}</p>
+                  <p className="text-xs text-gray-500">{user?.email || ""}</p>
                 </div>
-                <button className="dropdown-item">
-                  <Settings className="h-4 w-4 mr-2" />
-                  Account Settings
-                </button>
-                <button onClick={logout} className="dropdown-item text-red-600 hover:bg-red-50">
+                <button onClick={logout} className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
                   <LogOut className="h-4 w-4 mr-2" />
                   Sign out
                 </button>

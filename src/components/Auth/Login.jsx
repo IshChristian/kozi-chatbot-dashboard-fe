@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { useAuth } from "../../contexts/AuthContext"
+import axios from "axios"
 import { Mail, Lock, Eye, EyeOff } from "lucide-react"
 
 function Login() {
@@ -14,7 +14,6 @@ function Login() {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
-  const { login } = useAuth()
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -30,15 +29,35 @@ function Login() {
     setLoading(true)
     setError("")
 
-    const result = await login(formData.email, formData.password)
-
-    if (result.success) {
-      navigate("/dashboard")
-    } else {
-      setError(result.error)
+    try {
+      const res = await axios.post("http://localhost:3000/api/users/login", {
+        email: formData.email,
+        password: formData.password,
+      })
+      
+      if (res.data && res.status === 200) {
+        const { _id, fullName, email, role } = res.data
+        console.log("Login successful:", res.data)
+        
+        // Store user data in localStorage
+        localStorage.setItem("user", JSON.stringify({ _id, fullName, email, role }))
+        localStorage.setItem("user_id", JSON.stringify({ _id }))
+        window.location.reload()
+        
+        // Navigate to dashboard
+        navigate("/dashboard")
+        
+        
+        
+      } else {
+        setError("Login failed. Please check your credentials.")
+      }
+    } catch (err) {
+      console.error("Login error:", err)
+      setError(err.response?.data?.error || err.response?.data?.message || "Login failed. Please try again.")
+    } finally {
+      setLoading(false)
     }
-
-    setLoading(false)
   }
 
   return (
