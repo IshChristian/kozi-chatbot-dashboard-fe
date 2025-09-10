@@ -6,7 +6,7 @@ import aboutKozi from "./aboutKozi"
 import ReactMarkdown from "react-markdown"
 import axios from "axios"
 
-const OPENROUTER_API_KEY = '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'
+const TOGETHER_API_KEY = '79593d06279efa89903546e2deebdf8f2c5fb7e17444a72c40b3340135aaf25f' // Replace with your Together AI API key
 
 // Fixed: Parse JSON from localStorage and handle potential errors
 let currentUserId = null
@@ -29,18 +29,20 @@ try {
 const botUserId = "68c09a3524956f1ac9df7759" // recipient (replace with your bot's user id)
 
 async function getAIAnswer(question) {
-  const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+  const response = await fetch("https://api.together.xyz/v1/chat/completions", {
     method: "POST",
     headers: {
-      "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+      "Authorization": `Bearer ${TOGETHER_API_KEY}`,
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      model: "openai/gpt-3.5-turbo",
+      model: "meta-llama/Llama-3.2-3B-Instruct-Turbo", // You can change this to other Together AI models
       messages: [
         { role: "system", content: `You are a helpful assistant. Use the following information about KOZi to answer user questions:\n${aboutKozi}` },
         { role: "user", content: question }
-      ]
+      ],
+      max_tokens: 1000,
+      temperature: 0.7
     })
   })
   const data = await response.json()
