@@ -13,7 +13,7 @@ import {
 } from "lucide-react"
 
 const menuItems = [
-  { name: "Chat", path: "/dashboard/chat", icon: MessageCircle }
+  { name: "Chat", path: "/dashboard", icon: MessageCircle }
 ]
 
 function Sidebar({ sidebarOpen, setSidebarOpen }) {
