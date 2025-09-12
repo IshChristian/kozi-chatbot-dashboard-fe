@@ -54,35 +54,6 @@ function Header({ setSidebarOpen }) {
         </div>
 
         <div className="flex items-center space-x-4">
-          {/* Notifications */}
-          <div className="relative" ref={notificationRef}>
-            <button
-              onClick={() => setNotificationDropdownOpen(!notificationDropdownOpen)}
-              className="text-gray-600 hover:text-gray-800 relative p-2 rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              <Bell className="h-6 w-6" />
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
-                3
-              </span>
-            </button>
-
-            {notificationDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-100 py-1 z-50">
-                <div className="px-4 py-2 border-b border-gray-200">
-                  <h3 className="text-sm font-medium text-gray-900">Notifications</h3>
-                </div>
-                {notifications.map((notification) => (
-                  <div key={notification.id} className="px-4 py-3 hover:bg-gray-50 cursor-pointer">
-                    <p className="text-sm text-gray-900">{notification.message}</p>
-                    <p className="text-xs text-gray-500 mt-1">{notification.time}</p>
-                  </div>
-                ))}
-                <div className="px-4 py-2 border-t border-gray-200">
-                  <button className="text-sm text-primary hover:text-pink-600">View all notifications</button>
-                </div>
-              </div>
-            )}
-          </div>
 
           {/* User dropdown */}
           <div className="relative" ref={dropdownRef}>

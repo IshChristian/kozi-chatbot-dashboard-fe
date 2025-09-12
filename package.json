@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@langchain/community": "^0.3.55",
+    "@langchain/core": "^0.3.75",
     "@tailwindcss/vite": "^4.1.13",
     "axios": "^1.11.0",
     "class-variance-authority": "^0.7.1",

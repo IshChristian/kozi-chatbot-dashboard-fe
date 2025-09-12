@@ -5,6 +5,9 @@ import { Send, Bot, User } from "lucide-react"
 import aboutKozi from "./aboutKozi"
 import ReactMarkdown from "react-markdown"
 import axios from "axios"
+import { ChatTogetherAI } from "@langchain/community/chat_models/togetherai"
+import { HumanMessage, SystemMessage } from "@langchain/core/messages"
+import { StringOutputParser } from "@langchain/core/output_parsers"
 
 const TOGETHER_API_KEY = '79593d06279efa89903546e2deebdf8f2c5fb7e17444a72c40b3340135aaf25f' // Replace with your Together AI API key
 
@@ -28,25 +31,47 @@ try {
 
 const botUserId = "68c09a3524956f1ac9df7759" // recipient (replace with your bot's user id)
 
-async function getAIAnswer(question) {
-  const response = await fetch("https://api.together.xyz/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${TOGETHER_API_KEY}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      model: "meta-llama/Llama-3.2-3B-Instruct-Turbo", // You can change this to other Together AI models
-      messages: [
-        { role: "system", content: `You are a helpful assistant. Use the following information about KOZi to answer user questions:\n${aboutKozi}` },
-        { role: "user", content: question }
-      ],
-      max_tokens: 1000,
-      temperature: 0.7
+// Initialize LangChain ChatTogetherAI model
+const llm = new ChatTogetherAI({
+  model: "meta-llama/Llama-3.2-3B-Instruct-Turbo",
+  apiKey: TOGETHER_API_KEY,
+  temperature: 0.7,
+  maxTokens: 1000,
+})
+
+// Create output parser
+const parser = new StringOutputParser()
+
+// Chain the model with the parser
+const chain = llm.pipe(parser)
+
+async function getAIAnswer(question, conversationHistory = []) {
+  try {
+    // Create system message with KOZi information
+    const systemMessage = new SystemMessage(`You are KOZi, a helpful assistant. Use the following information about KOZi to answer user questions:\n${aboutKozi}`)
+    
+    // Convert conversation history to LangChain messages
+    const historyMessages = conversationHistory.slice(-10).map(msg => {
+      // Only include recent history to stay within token limits
+      return msg.sender === currentUserId 
+        ? new HumanMessage(msg.content)
+        : new SystemMessage(msg.content)
     })
-  })
-  const data = await response.json()
-  return data.choices?.[0]?.message?.content || "Sorry, I couldn't get an answer from AI."
+    
+    // Create current user message
+    const userMessage = new HumanMessage(question)
+    
+    // Combine all messages
+    const messages = [systemMessage, ...historyMessages, userMessage]
+    
+    // Get response from LangChain
+    const response = await chain.invoke(messages)
+    
+    return response || "Sorry, I couldn't get an answer from AI."
+  } catch (error) {
+    console.error("Error getting AI response:", error)
+    return "Sorry, I encountered an error while processing your request."
+  }
 }
 
 function Chat() {
@@ -102,6 +127,7 @@ function Chat() {
     console.log(userMessage)
 
     setMessages((prev) => [...prev, { ...userMessage, _id: Date.now() }])
+    const currentInput = inputText
     setInputText("")
     setIsTyping(true)
 
@@ -109,8 +135,8 @@ function Chat() {
       // Save user message to DB
       await axios.post("https://kozi-be.onrender.com/api/messages", userMessage)
 
-      // Get bot response
-      const botContent = await getAIAnswer(inputText)
+      // Get bot response using LangChain with conversation history
+      const botContent = await getAIAnswer(currentInput, messages)
       const botMessage = {
         sender: botUserId,
         recipient: currentUserId,
@@ -126,7 +152,15 @@ function Chat() {
     } catch (error) {
       console.error("Error sending message:", error)
       setIsTyping(false)
-      // You might want to show an error message to the user
+      // Add error message to chat
+      const errorMessage = {
+        sender: botUserId,
+        recipient: currentUserId,
+        content: "Sorry, I encountered an error. Please try again.",
+        timestamp: new Date(),
+        _id: Date.now() + 2
+      }
+      setMessages((prev) => [...prev, errorMessage])
     }
   }
 
